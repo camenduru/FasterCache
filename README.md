@@ -1,5 +1,5 @@
 <div align="center">
-<h1>FasterCache: Training-Free Video Diffusion Model Acceleration with High Quality</h1>
+<h1>FasterCache: Training-Free Video Diffusion Model Acceleration with High Quality</h1></div>
 
 
 
@@ -25,10 +25,6 @@
 ## About
 
 We present ***FasterCache***, a novel training-free strategy designed to accelerate the inference of video diffusion models with high-quality generation. For more details and visual results, go checkout our [Project Page](https://cszy98.github.io/FasterCache/).
-
-<video width="640" height="480" controls>
-    <source src="https://cszy98.github.io/FasterCache/static/videos/teaser_video_latest_compressed.mp4" type="video/mp4">
-</video>
 
 ## Usage
 
