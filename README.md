@@ -37,7 +37,7 @@ Run the following instructions to create an Anaconda environment.
 ```
 conda create -n fastercache python=3.10 -y
 conda activate fastercache
-git clone
+git clone https://github.com/Vchitect/FasterCache
 cd FasterCache
 pip install -e .
 ```
