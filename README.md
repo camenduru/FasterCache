@@ -33,7 +33,7 @@
 
 ## About
 
-We present ***FasterCache***, a novel training-free strategy designed to accelerate the inference of video diffusion models with high-quality generation. For more details and visual results, go checkout our [Project Page](https://cszy98.github.io/FasterCache/).
+We present ***FasterCache***, a novel training-free strategy designed to accelerate the inference of video diffusion models with high-quality generation. For more details and visual results, go checkout our [Project Page](https://vchitect.github.io/FasterCache/).
 
 https://github.com/user-attachments/assets/035c50c2-7b74-4755-ac1e-e5aa1cffba2a
 
