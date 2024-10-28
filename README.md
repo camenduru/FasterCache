@@ -19,8 +19,17 @@
 </div>
 <div align="center">(‡: Project lead; †: Corresponding authors)</div>
 
+​<p align="center">
+    <a href="https://arxiv.org/abs/2410.19355">Paper</a> | 
+    <a href="https://cszy98.github.io/FasterCache/">Project Page</a>
+</p>
 
-​                                                                      [Paper](https://arxiv.org/abs/2410.19355) | [Project Page](https://cszy98.github.io/FasterCache/)
+<p align="center">
+    <a href="https://hits.seeyoufarm.com"><img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2FVchitect%2FFasterCache&count_bg=%2379C83D&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=Github+visitors&edge_flat=false"/></a>
+    <a href="https://hits.seeyoufarm.com"><img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fcszy98.github.io%2FFasterCache%2F&count_bg=%23C83D5D&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=Page+visitors&edge_flat=false"/></a>
+</p>
+
+
 
 ## About
 
