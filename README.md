@@ -57,57 +57,57 @@ We currently support [Open-Soa 1.2](https://github.com/hpcaitech/Open-Sora), [Op
 
 - **Open-Sora**
 
-For single-GPU inference on Open-Sora, run the following command:
-```
-bash scripts/opensora/fastercache_sample_opensora.sh
-```
+    For single-GPU inference on Open-Sora, run the following command:
+    ```
+    bash scripts/opensora/fastercache_sample_opensora.sh
+    ```
 
-For multi-GPU inference on Open-Sora, run the following command:
+    For multi-GPU inference on Open-Sora, run the following command:
 
-```
-bash scripts/opensora/fastercache_sample_multi_device_opensora.sh
-```
+    ```
+    bash scripts/opensora/fastercache_sample_multi_device_opensora.sh
+    ```
 
 - **Open-Sora-Plan**
 
-For single-GPU inference on Open-Sora-Plan, run the following command:
-```
-bash scripts/opensora_plan/fastercache_sample_opensoraplan.sh
-```
-
-For multi-GPU inference on Open-Sora-Plan, run the following command:
-
-```
-bash scripts/opensora_plan/fastercache_sample_multi_device_opensoraplan.sh
-```
+    For single-GPU inference on Open-Sora-Plan, run the following command:
+    ```
+    bash scripts/opensora_plan/fastercache_sample_opensoraplan.sh
+    ```
+    
+    For multi-GPU inference on Open-Sora-Plan, run the following command:
+    
+    ```
+    bash scripts/opensora_plan/fastercache_sample_multi_device_opensoraplan.sh
+    ```
 
 - **Latte**
 
 
-For single-GPU inference on Latte, run the following command:
-```
-bash scripts/latte/fastercache_sample_latte.sh
-```
-
-For multi-GPU inference on Latte, run the following command:
-
-```
-bash scripts/latte/fastercache_sample_multi_device_latte.sh
-```
+    For single-GPU inference on Latte, run the following command:
+    ```
+    bash scripts/latte/fastercache_sample_latte.sh
+    ```
+    
+    For multi-GPU inference on Latte, run the following command:
+    
+    ```
+    bash scripts/latte/fastercache_sample_multi_device_latte.sh
+    ```
 
 - **CogVideoX**
 
-For inference on CogVideoX, run the following command:
-```
-bash scripts/cogvideox/fastercache_sample_cogvideox.sh
-```
+    For inference on CogVideoX, run the following command:
+    ```
+    bash scripts/cogvideox/fastercache_sample_cogvideox.sh
+    ```
 
 - **Vchitect 2.0**
 
-For inference on Vchitect 2.0, run the following command:
-```
-bash scripts/vchitect/fastercache_sample_vchitect.sh
-```
+    For inference on Vchitect 2.0, run the following command:
+    ```
+    bash scripts/vchitect/fastercache_sample_vchitect.sh
+    ```
 
 ## BibTeX
 
