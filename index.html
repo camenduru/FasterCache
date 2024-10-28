@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <!-- Meta tags for social media banners, these should be filled in appropriatly as they are your "business card" -->
+  <!-- Replace the content tag with appropriate information -->
+  <meta name="description" content="DESCRIPTION META TAG">
+  <meta property="og:title" content="SOCIAL MEDIA TITLE TAG"/>
+  <meta property="og:description" content="SOCIAL MEDIA DESCRIPTION TAG TAG"/>
+  <meta property="og:url" content="URL OF THE WEBSITE"/>
+  <!-- Path to banner image, should be in the path listed below. Optimal dimenssions are 1200X630-->
+  <meta property="og:image" content="static/image/your_banner_image.png" />
+  <meta property="og:image:width" content="1200"/>
+  <meta property="og:image:height" content="630"/>
+
+
+  <meta name="twitter:title" content="TWITTER BANNER TITLE META TAG">
+  <meta name="twitter:description" content="TWITTER BANNER DESCRIPTION META TAG">
+  <!-- Path to banner image, should be in the path listed below. Optimal dimenssions are 1200X600-->
+  <meta name="twitter:image" content="static/images/your_twitter_banner_image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <!-- Keywords for your paper to be indexed by-->
+  <meta name="keywords" content="KEYWORDS SHOULD BE PLACED HERE">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+  <title>FasterCache: Training-Free Video Diffusion Model Acceleration with High Quality</title>
+  <link rel="icon" type="image/x-icon" href="static/images/favicon.ico">
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+  rel="stylesheet">
+
+  <link rel="stylesheet" href="static/css/bulma.min.css">
+  <link rel="stylesheet" href="static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="static/css/fontawesome.all.min.css">
+  <link rel="stylesheet"
+  href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="static/css/index.css">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://documentcloud.adobe.com/view-sdk/main.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script defer src="static/js/fontawesome.all.min.js"></script>
+  <script src="static/js/bulma-carousel.min.js"></script>
+  <script src="static/js/bulma-slider.min.js"></script>
+  <script src="static/js/index.js"></script>
+</head>
+<body>
+
+
+  <section class="hero">
+    <div class="hero-body">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered">
+          <div class="column has-text-centered">
+            <h1 class="title is-1 publication-title">FasterCache: Training-Free Video Diffusion Model Acceleration with High Quality</h1>
+            <div class="is-size-5 publication-authors">
+              <!-- Paper authors -->
+              <span class="author-block">
+                <a href="https://scholar.google.com/citations?user=FkkaUgwAAAAJ&hl=en" target="_blank">Zhengyao Lv</a><sup>1</sup>,</span>
+                <span class="author-block">
+                  <a href="https://chenyangsi.github.io/" target="_blank">Chenyang Si</a><sup>2‡</sup>,</span>
+                  <span class="author-block">
+                    <a href="" target="_blank">Junhao Song</a><sup>3</sup>,</span>
+                  </span>
+                  <span class="author-block">
+                    <a href="" target="_blank">Zhenyu Yang</a><sup>3</sup>,</span>
+                  </span>
+                  <span class="author-block">
+                    <a href="https://mmlab.siat.ac.cn/yuqiao" target="_blank">Yu Qiao</a><sup>3</sup>,</span>
+                  </span>
+                  <span class="author-block">
+                    <a href="https://liuziwei7.github.io/" target="_blank">Ziwei Liu</a><sup>2†</sup>,</span>
+                  </span>
+                  <span class="author-block">
+                    <a href="https://i.cs.hku.hk/~kykwong/" target="_blank">Kwan-Yee K. Wong</a><sup>1†</sup>
+                  </div>
+
+                  <div class="is-size-5 publication-authors">
+                    <span class="author-block">The University of Hong Kong<sup>1</sup> &nbsp;&nbsp;&nbsp;&nbsp; S-Lab, Nanyang Technological University<sup>2</sup> <br> Shanghai Artificial Intelligence Laboratory<sup>3</sup></span>
+                    <span class="eql-cntrb"><small><br><sup>‡</sup>Project Leader.&nbsp;&nbsp;&nbsp;&nbsp;<sup>†</sup>Corresponding Author.</small></span>
+                  </div>
+
+                  <!-- <div class="column has-text-centered">
+                    <div class="publication-links">
+                      <span class="link-block">
+                        <a href="https://arxiv.org/pdf/<ARXIV PAPER ID>.pdf" target="_blank"
+                        class="external-link button is-normal is-rounded is-dark">
+                        <span class="icon">
+                          <i class="fas fa-file-pdf"></i>
+                        </span>
+                        <span>Paper</span>
+                      </a>
+                    </span> -->
+
+                  <!-- Github link -->
+                  <span class="link-block">
+                    <a href="https://github.com/Vchitect/FasterCache" target="_blank"
+                    class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="fab fa-github"></i>
+                    </span>
+                    <span>Code</span>
+                  </a>
+                </span>
+
+                <!-- ArXiv abstract Link -->
+                <span class="link-block">
+                  <a href="https://arxiv.org/abs/2410.19355" target="_blank"
+                  class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                    <i class="ai ai-arxiv"></i>
+                  </span>
+                  <span>arXiv</span>
+                </a>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- Teaser video-->
+<section class="hero teaser">
+  <div class="container is-max-desktop">
+    <div class="hero-body">
+      <video poster="" id="tree" autoplay controls muted loop height="100%">
+        <!-- Your video here -->
+        <source src="static/videos/teaser_video_latest_compressed.mp4"
+        type="video/mp4">
+      </video>
+    </div>
+  </div>
+</section>
+<!-- End teaser video -->
+
+<!-- Paper abstract -->
+<section class="section hero is-light">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+            In this paper, we present FasterCache, a novel training-free strategy designed to accelerate the inference of video diffusion models with high-quality generation. By analyzing existing cache-based methods, we observe that directly reusing adjacent-step features degrades video quality due to the loss of subtle variations. We further perform a pioneering investigation of the acceleration potential of classifier-free guidance (CFG) and reveal significant redundancy between conditional and unconditional features within the same timestep. Capitalizing on these observations, we introduce FasterCache to substantially accelerate diffusion-based video generation. Our key contributions include a dynamic feature reuse strategy that preserves both feature distinction and temporal continuity, and CFG-Cache which optimizes the reuse of conditional and unconditional outputs to further enhance inference speed without compromising video quality. We empirically evaluate FasterCache on recent video diffusion models. Experimental results show that FasterCache can significantly accelerate video generation (e.g., 1.67× speedup on Vchitect-2.0) while keeping video quality comparable to the baseline, and consistently outperform existing methods in both inference speed and video quality.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- End paper abstract -->
+
+<!-- teaser image -->
+<section class="hero is-small" style="display: flex; justify-content: center; align-items: center; height: 75vh; width: 100vw;">
+  <div class="hero-body">
+    <div class="container has-text-centered" style="width: 100%;">
+      <figure class="image" style="margin: 0 auto; width: 100%;">
+        <img src="static/images/newteaser.png" alt="Description of the image" style="width: 65%; height: auto; display: block; margin: 0 auto;">
+      </figure>
+      <h2 class="subtitle" style="font-size: 16px;">
+        Figure 1. Comparison of visual quality and inference speed with competing methods.
+      </h2>
+    </div>
+  </div>
+</section>
+<!-- end teaser image -->
+
+
+<!-- New section: FasterCache-DFR -->
+<section class="section hero is-light">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-left">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Dynamic Feature Reuse Strategy</h2> <!-- 一级标题 -->
+        
+        <h3 class="title is-4">Motivation</h3> <!-- 二级标题 -->
+        <p>
+          Attention feature reuse has become a primary focus for cache-based acceleration methods in video generation. Previous methods typically assume a high degree of feature similarity between adjacent timesteps in the iterative denoising process, and achieve accelerated inference by sharing features across consecutive timesteps. However, our investigation reveals that while features in the same attention module (e.g., spatial attention) appear to be nearly identical between adjacent timesteps, there exist some subtle yet discernible differences. As a result, a naive feature caching and reuse strategy often leads to degradation of details in generated videos.
+        </p>
+        <!-- Add an image to support the explanation -->
+        <figure class="image" style="text-align: center; margin: 20px 0;">
+          <img src="static/images/motivation1.jpg" alt="Attention difference comparison graph">
+          <figcaption>Figure 2: Visual quality degradation caused by Vanilla Feature Reuse (left) and feature differences between adjacent timesteps (right).</figcaption>
+        </figure>
+
+        <h3 class="title is-4">Implementation</h3> <!-- 二级标题 -->
+        <p>
+          Instead of directly reusing previously cached features at the current timestep, we propose a Dynamic Feature Reuse Strategy that can more effectively capture and preserve critical details in generated videos. We calculate the attention outputs for each layer at \( t+2 \) and \( t \) timesteps, denoted as \( F_{t+2} \) and \( F_{t} \), and store them in the feature cache as \( F^{t+2}_{cache} \) and \( F^{t}_{cache} \). For the intermediate \( t-1 \) timestep, its features can be computed as:
+        </p>
+        <p>\[
+        F_{t-1} = F^t_{cache} + (F^t_{cache} - F^{t+2}_{cache}) * w(t),
+        \]</p>
+        <p>
+          where \( w(t) \) is a weighting function that modulates the contribution of the feature difference to account for variation between adjacent timesteps, ensuring both efficiency and the preservation of fine details in the generated videos. Consequently, our approach significantly accelerates inference while preserving the visual quality of the synthesized videos.
+        </p>
+
+      </div>
+    </div>
+  </div>
+</section>
+<!-- End of FasterCache-DFR -->
+
+<!-- New section: FasterCache-CFGCACHE -->
+<section class="section hero is-light">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-left">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">CFG-Cache</h2> <!-- 一级标题 -->
+        
+        <h3 class="title is-4">Motivation</h3> <!-- 二级标题 -->
+        <p>
+          In the mid to later stages of sampling, the similarity between conditional and unconditional outputs at the same timestep is remarkably high, significantly surpassing that of adjacent steps. Hence, directly reusing unconditional outputs from adjacent timesteps, as suggested in existing methods, leads to significant error accumulation, resulting in a decline in video quality. These results indicate substantial redundancy in the CFG process and highlight the necessity for a new strategy to accelerate CFG without compromising the quality of the generated outputs.
+        </p>
+        <!-- Add an image to support the explanation -->
+        <figure class="image" style="text-align: center; margin: 20px 0;">
+          <img src="static/images/motivation2.jpg" alt="Attention difference comparison graph">
+          <figcaption>Figure 3:  (a) The MSE between conditional and unconditional outputs at the same timestep as well as across adjacent timesteps. (b) Directly reusing unconditional outputs from previous timesteps will lead to a significantly degraded visual quality.</figcaption>
+        </figure>
+
+        <h3 class="title is-4">Implementation</h3> <!-- 二级标题 -->
+        <p>
+        Since both the conditional and unconditional outputs in CFG represent predicted noise, we analyze the differences between these two outputs in the frequency domain. we observe that, in the early and mid-stages of the sampling process, the conditional and unconditional outputs at the same timestep exhibit a significant bias in the low-frequency components, which progressively shifts to the high-frequency components in the later steps. This suggests that despite their overall similarity, key differences in frequency components must be addressed to avoid the degradation of details.
+        </p>
+        
+        <p>
+        Building on this discovery, we propose CFG-Cache, a novel approach designed to account for both high- and low-frequency biases, coupled with a timestep-adaptive enhancement technique.
+        </p>
+        <!-- Add an image to support the explanation -->
+        <figure class="image" style="text-align: center; margin: 20px 0;">
+          <img src="static/images/method.png" alt="Attention difference comparison graph">
+          <figcaption>Figure 4: Overview of the CFG-Cache.</figcaption>
+        </figure>
+
+      </div>
+    </div>
+  </div>
+</section>
+<!-- End of FasterCache-CFGCACHE -->
+
+
+<!-- New section: FasterCache-DFR -->
+<section class="section hero is-light">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-left">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Evaluation</h2> <!-- 一级标题 -->
+        
+        <h3 class="title is-4">Quantitative Results</h3> <!-- 二级标题 -->
+        <p>
+        </p>
+        <!-- Add an image to support the explanation -->
+        <figure class="image" style="text-align: center; margin: 20px 0;">
+          <img src="static/images/quantitiveResults.png" alt="Attention difference comparison graph">
+        </figure>
+
+        <h3 class="title is-4">Visual Results</h3> <!-- 二级标题 -->
+        <p>
+        </p>
+
+        <figure style="position: relative; display: inline-block; text-align: center; margin: 10px; margin-bottom: 20px;">
+          <video poster="" id="tree" autoplay controls muted loop width="720" height="720">
+            <source src="static/videos/combined_os.mp4" type="video/mp4">
+          </video>
+          <div style="position: absolute; top: -30px; left: 0; right: 0; display: flex; justify-content: space-between; padding: 0 20px;">
+            <span style="background-color: rgba(255, 255, 255, 0.1); border-radius: 5px; padding: 5px; margin-left: 25px">Original</span>
+            <span style="background-color: rgba(255, 255, 255, 0.1); border-radius: 5px; padding: 5px;">\( \Delta - DiT \)</span>
+            <span style="background-color: rgba(255, 255, 255, 0.1); border-radius: 5px; padding: 5px;">PAB</span>
+            <span style="background-color: rgba(255, 255, 255, 0.1); border-radius: 5px; padding: 5px; margin-right: 25px">FasterCache</span>
+          </div>
+          <figcaption style="text-align: center;">Open-Sora 48 frames 480P</figcaption>
+        </figure>
+
+        <figure style="position: relative; display: inline-block; text-align: center; margin: 10px; margin-bottom: 20px;">
+          <video poster="" id="tree" autoplay controls muted loop width="720" height="720">
+            <source src="static/videos/combined_osp.mp4" type="video/mp4">
+          </video>
+          <div style="position: absolute; top: -30px; left: 0; right: 0; display: flex; justify-content: space-between; padding: 0 20px;">
+            <span style="background-color: rgba(255, 255, 255, 0.1); border-radius: 5px; padding: 5px; margin-left: 25px">Original</span>
+            <span style="background-color: rgba(255, 255, 255, 0.1); border-radius: 5px; padding: 5px;">\( \Delta - DiT \)</span>
+            <span style="background-color: rgba(255, 255, 255, 0.1); border-radius: 5px; padding: 5px;">PAB</span>
+            <span style="background-color: rgba(255, 255, 255, 0.1); border-radius: 5px; padding: 5px; margin-right: 25px">FasterCache</span>
+          </div>
+          <figcaption style="text-align: center;">Open-Sora-Plan 65 frames 512x512</figcaption>
+        </figure>
+
+        <figure style="position: relative; display: inline-block; text-align: center; margin: 10px; margin-bottom: 20px;">
+          <video poster="" id="tree" autoplay controls muted loop width="720" height="720">
+            <source src="static/videos/combined_latte.mp4" type="video/mp4">
+          </video>
+          <div style="position: absolute; top: -30px; left: 0; right: 0; display: flex; justify-content: space-between; padding: 0 20px;">
+            <span style="background-color: rgba(255, 255, 255, 0.1); border-radius: 5px; padding: 5px; margin-left: 25px">Original</span>
+            <span style="background-color: rgba(255, 255, 255, 0.1); border-radius: 5px; padding: 5px;">\( \Delta - DiT \)</span>
+            <span style="background-color: rgba(255, 255, 255, 0.1); border-radius: 5px; padding: 5px;">PAB</span>
+            <span style="background-color: rgba(255, 255, 255, 0.1); border-radius: 5px; padding: 5px; margin-right: 25px">FasterCache</span>
+          </div>
+          <figcaption style="text-align: center;">Latte 16 frames 512x512</figcaption>
+        </figure>
+
+        <figure style="position: relative; display: inline-block; text-align: center; margin: 10px; margin-bottom: 20px;">
+          <video poster="" id="tree" autoplay controls muted loop width="720" height="720">
+            <source src="static/videos/combined_cog.mp4" type="video/mp4">
+          </video>
+          <div style="position: absolute; top: -30px; left: 0; right: 0; display: flex; justify-content: space-between; padding: 0 20px;">
+            <span style="background-color: rgba(255, 255, 255, 0.1); border-radius: 5px; padding: 5px; margin-left: 40px">Original</span>
+            <span style="background-color: rgba(255, 255, 255, 0.1); border-radius: 5px; padding: 5px;">\( \Delta - DiT \)</span>
+            <span style="background-color: rgba(255, 255, 255, 0.1); border-radius: 5px; padding: 5px; margin-right: 40px">FasterCache</span>
+          </div>
+          <figcaption style="text-align: center;">CogVideoX 48 frames 480P</figcaption>
+        </figure>
+
+        <figure style="position: relative; display: inline-block; text-align: center; margin: 10px; margin-bottom: 20px;">
+          <video poster="" id="tree" autoplay controls muted loop width="720" height="720">
+            <source src="static/videos/combined_vchi.mp4" type="video/mp4">
+          </video>
+          <div style="position: absolute; top: -30px; left: 0; right: 0; display: flex; justify-content: space-between; padding: 0 20px;">
+            <span style="background-color: rgba(255, 255, 255, 0.1); border-radius: 5px; padding: 5px; margin-left: 40px">Original</span>
+            <span style="background-color: rgba(255, 255, 255, 0.1); border-radius: 5px; padding: 5px;">\( \Delta - DiT \)</span>
+            <span style="background-color: rgba(255, 255, 255, 0.1); border-radius: 5px; padding: 5px; margin-right: 40px">FasterCache</span>
+          </div>
+          <figcaption style="text-align: center;">Vchitect 2.0 40 frames 480P</figcaption>
+        </figure>
+
+        <h3 class="title is-4">Scalability and Generalization</h3> <!-- 二级标题 -->  
+
+        <h4 class="title is-5">Scaling to multiple GPUs</h4> <!-- 二级标题 -->
+        <!-- Add an image to support the explanation -->
+        <figure class="image" style="text-align: center; margin: 20px 0;">
+          <figcaption>Table 2: Scaling to multiple GPUs with DSP.</figcaption>
+          <img src="static/images/multigpu.png" alt="Attention difference comparison graph">
+        </figure>
+
+        <h4 class="title is-5">Performance at different resolutions and lengths</h4> <!-- 二级标题 -->
+        <!-- Add an image to support the explanation -->
+        <figure class="image" style="text-align: center; margin: 20px 0;">
+          <img src="static/images/scalev3.jpg" alt="Attention difference comparison graph">
+          <figcaption>Figure 5: Acceleration efficiency of our method at different video resolutions and lengths.</figcaption>
+        </figure>
+
+        <h4 class="title is-5">I2V and image synthesis performance</h4> <!-- 二级标题 -->
+        <!-- Add an image to support the explanation -->
+        <figure class="image" style="text-align: center; margin: 20px 0;">
+          <img src="static/images/i2v.jpg" alt="Attention difference comparison graph">
+          <figcaption>Figure 6: Visual results and inference time of our method on I2V and image synthesis models.</figcaption>
+        </figure>
+
+        <figure style="position: relative; display: inline-block; text-align: center; margin: 10px; margin-bottom: 20px;">
+            <video poster="" id="tree" autoplay controls muted loop width="720" height="720">
+                <source src="static/videos/dynamic_output.mp4" type="video/mp4">
+            </video>
+            <div style="position: absolute; top: -30px; left: 0; right: 0; display: flex; justify-content: space-between; padding: 0 20px;">
+                <span style="background-color: rgba(255, 255, 255, 0.1); border-radius: 5px; padding: 5px; margin-left: 150px">Original</span>
+                <span style="background-color: rgba(255, 255, 255, 0.1); border-radius: 5px; padding: 5px; margin-right: 130px">FasterCache</span>
+            </div>
+            <figcaption style="text-align: center;">DynamiCrafter 16 frames 1024x576</figcaption>
+        </figure>
+
+
+      </div>
+    </div>
+  </div>
+</section>
+<!-- End of FasterCache-DFR -->
+
+
+<!-- 
+<section class="section hero is-light">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Related Work</h2>
+        <div class="content has-text-justified">
+            <ol>
+              <li>Zhao, Xuanlei, Xiaolong Jin, Kai Wang, and Yang You. "Real-Time Video Generation with Pyramid Attention Broadcast." arXiv preprint arXiv:2408.12588 (2024).</li>
+            </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+-->
+
+<!--BibTex citation -->
+  <section class="section" id="BibTeX">
+    <div class="container is-max-desktop content">
+      <h2 class="title">BibTeX</h2>
+      <pre><code>@article{lv2024fastercache,
+  title={FasterCache: Training-Free Video Diffusion Model Acceleration with High Quality},
+  author={Lv, Zhengyao and Si, Chenyang and Song, Junhao and Yang, Zhenyu and Qiao, Yu and Liu, Ziwei and Kwan-Yee K. Wong},
+  booktitle={arxiv},
+  year={2024}
+}</code></pre>
+    </div>
+</section>
+<!--End BibTex citation -->
+
+
+  <footer class="footer">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+
+          <p>
+            This page was built using the <a href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank">Academic Project Page Template</a> which was adopted from the <a href="https://nerfies.github.io" target="_blank">Nerfies</a> project page.
+            <br> This website is licensed under a <a rel="license"  href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank">Creative
+            Commons Attribution-ShareAlike 4.0 International License</a>.
+          </p>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- Statcounter tracking code -->
+  
+<!-- You can add a tracker to track page visits by creating an account at statcounter.com -->
+
+    <!-- End of Statcounter Code -->
+
+  </body>
+  </html>
