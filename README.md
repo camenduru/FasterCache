@@ -20,7 +20,7 @@
 <div align="center">(‡: Project lead; †: Corresponding authors)</div>
 
 
-​                                                                      [Paper]() | [Project Page](https://cszy98.github.io/FasterCache/)
+​                                                                      [Paper](https://arxiv.org/abs/2410.19355) | [Project Page](https://cszy98.github.io/FasterCache/)
 
 ## About
 
