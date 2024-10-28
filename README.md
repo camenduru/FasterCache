@@ -39,7 +39,7 @@ https://github.com/user-attachments/assets/035c50c2-7b74-4755-ac1e-e5aa1cffba2a
 
 ## Usage
 
-#### Installation
+### Installation
 
 Run the following instructions to create an Anaconda environment.
 
@@ -51,9 +51,11 @@ cd FasterCache
 pip install -e .
 ```
 
-#### Inference
+### Inference
 
 We currently support [Open-Soa 1.2](https://github.com/hpcaitech/Open-Sora), [Open-Sora-Plan 1.1](https://github.com/PKU-YuanGroup/Open-Sora-Plan), [Latte](https://github.com/Vchitect/Latte), [CogvideoX-2B](https://github.com/THUDM/CogVideo), and [Vchitect 2.0](https://github.com/Vchitect/Vchitect-2.0). You can achieve accelerated sampling by executing the scripts we provide.
+
+**Open-Sora**
 
 For single-GPU inference on Open-Sora, run the following command:
 ```
@@ -66,6 +68,8 @@ For multi-GPU inference on Open-Sora, run the following command:
 bash scripts/opensora/fastercache_sample_multi_device_opensora.sh
 ```
 
+**Open-Sora-Plan**
+
 For single-GPU inference on Open-Sora-Plan, run the following command:
 ```
 bash scripts/opensora_plan/fastercache_sample_opensoraplan.sh
@@ -76,6 +80,9 @@ For multi-GPU inference on Open-Sora-Plan, run the following command:
 ```
 bash scripts/opensora_plan/fastercache_sample_multi_device_opensoraplan.sh
 ```
+
+**Latte**
+
 
 For single-GPU inference on Latte, run the following command:
 ```
@@ -88,10 +95,14 @@ For multi-GPU inference on Latte, run the following command:
 bash scripts/latte/fastercache_sample_multi_device_latte.sh
 ```
 
+**CogVideoX**
+
 For inference on CogVideoX, run the following command:
 ```
 bash scripts/cogvideox/fastercache_sample_cogvideox.sh
 ```
+
+**Vchitect 2.0**
 
 For inference on Vchitect 2.0, run the following command:
 ```
