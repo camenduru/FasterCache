@@ -19,7 +19,7 @@
 </div>
 <div align="center">(‡: Project lead; †: Corresponding authors)</div>
 
-​<p align="center">
+<p align="center">
     <a href="https://arxiv.org/abs/2410.19355">Paper</a> | 
     <a href="https://vchitect.github.io/FasterCache/">Project Page</a>
 </p>
@@ -97,10 +97,18 @@ We currently support [Open-Sora 1.2](https://github.com/hpcaitech/Open-Sora), [O
 
 - **CogVideoX**
 
-    For inference on CogVideoX, run the following command:
+    For inference on CogVideoX-2B, run the following command:
     ```
     bash scripts/cogvideox/fastercache_sample_cogvideox.sh
     ```
+
+    For inference on CogVideoX-5B, run the following command:
+
+    ```
+    bash scripts/cogvideox/fastercache_sample_cogvideox5b.sh
+    ```
+
+    
 
 - **Vchitect 2.0**
 
