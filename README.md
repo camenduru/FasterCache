@@ -53,7 +53,7 @@ pip install -e .
 
 ### Inference
 
-We currently support [Open-Soa 1.2](https://github.com/hpcaitech/Open-Sora), [Open-Sora-Plan 1.1](https://github.com/PKU-YuanGroup/Open-Sora-Plan), [Latte](https://github.com/Vchitect/Latte), [CogvideoX-2B](https://github.com/THUDM/CogVideo), and [Vchitect 2.0](https://github.com/Vchitect/Vchitect-2.0). You can achieve accelerated sampling by executing the scripts we provide.
+We currently support [Open-Sora 1.2](https://github.com/hpcaitech/Open-Sora), [Open-Sora-Plan 1.1](https://github.com/PKU-YuanGroup/Open-Sora-Plan), [Latte](https://github.com/Vchitect/Latte), [CogvideoX-2B](https://github.com/THUDM/CogVideo), and [Vchitect 2.0](https://github.com/Vchitect/Vchitect-2.0). You can achieve accelerated sampling by executing the scripts we provide.
 
 - **Open-Sora**
 
