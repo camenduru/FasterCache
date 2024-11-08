@@ -84,3 +84,67 @@ def create_logger(logging_dir=None):
         logger = logging.getLogger(__name__)
         logger.addHandler(logging.NullHandler())
     return logger
+
+def all_to_all(input_: torch.Tensor, gather_dim: int, scatter_dim: int) -> torch.Tensor:
+    assert gather_dim != scatter_dim
+    assert 0 <= gather_dim < input_.ndim
+    assert 0 <= scatter_dim < input_.ndim
+    world_size = dist.get_world_size()
+    assert input_.size(scatter_dim) % world_size == 0
+
+    if world_size == 1:
+        return input_
+
+    inputs = [x.contiguous() for x in input_.chunk(world_size, dim=scatter_dim)]
+    outputs = [torch.empty_like(x) for x in inputs]
+    dist.all_to_all(outputs, inputs)
+
+    return torch.cat(outputs, dim=gather_dim)
+
+
+def sp_split(input_: torch.Tensor) -> torch.Tensor:
+    size = dist.get_world_size()
+    rank = dist.get_rank()
+    if size == 1:
+        return input_
+    assert input_.size(1) % size == 0
+    return input_.chunk(size, dim=1)[rank].contiguous()
+
+
+def sp_gather(input_: torch.Tensor) -> torch.Tensor:
+    size = dist.get_world_size()
+    rank = dist.get_rank()
+    if size == 1:
+        return input_
+    output = [torch.empty_like(input_) for _ in range(size)]
+    dist.all_gather(output, input_)
+    return torch.cat(output, dim=1)
+
+def _setup_dist_env_from_slurm():
+    import subprocess
+    from time import sleep
+    while not os.environ.get("MASTER_ADDR", ""):
+        try:
+            os.environ["MASTER_ADDR"] = subprocess.check_output(
+                "sinfo -Nh -n %s | head -n 1 | awk '{print $1}'" %
+                os.environ['SLURM_NODELIST'],
+                shell=True,
+            ).decode().strip()
+        except:
+            pass
+        sleep(1)
+    os.environ["MASTER_PORT"] = str(18183)
+    os.environ["RANK"] = os.environ["SLURM_PROCID"]
+    os.environ["WORLD_SIZE"] = os.environ["SLURM_NPROCS"]
+    os.environ["LOCAL_RANK"] = os.environ["SLURM_LOCALID"]
+    os.environ["LOCAL_WORLD_SIZE"] = os.environ["SLURM_NTASKS_PER_NODE"]
+
+def init_process_groups():
+    if any([
+        x not in os.environ
+        for x in ["RANK", "WORLD_SIZE", "MASTER_PORT", "MASTER_ADDR"]
+    ]):
+        _setup_dist_env_from_slurm()
+
+    dist.init_process_group("nccl")
+    torch.cuda.set_device(dist.get_rank() % torch.cuda.device_count())

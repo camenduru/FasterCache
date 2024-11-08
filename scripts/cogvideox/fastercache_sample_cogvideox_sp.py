@@ -19,7 +19,7 @@ from fastercache.models.cogvideox.diffusion_video import SATVideoDiffusionEngine
 from fastercache.models.cogvideox.arguments import get_args
 from torchvision.transforms.functional import center_crop, resize
 from torchvision.transforms import InterpolationMode
-from fastercache.utils.utils import init_process_groups
+from fastercache.utils.utils import init_process_groups, all_to_all, sp_split, sp_gather
 from fastercache.models.cogvideox.sgm.util import initialize_context_parallel
 import torch.distributed as dist
 
@@ -39,9 +39,10 @@ def read_from_file(p, rank=0, world_size=1):
     with open(p, "r") as fin:
         cnt = -1
         for l in fin:
+            # yield l.strip()
             cnt += 1
-            if cnt % world_size != rank:
-                continue
+            # if cnt % world_size != rank:
+            #     continue
             yield l.strip(), cnt
 
 
@@ -146,6 +147,59 @@ from fastercache.models.cogvideox.sgm.modules.diffusionmodules.util import (
     timestep_embedding,
 )
 from sat.ops.layernorm import LayerNorm, RMSNorm
+from time import time
+
+
+def sp_attention_forward(layer, hidden_states, mask, **kw_args):
+    layer = layer.transformer.layers[kw_args['layer_id']].attention
+    attention_fn = attention_fn_default
+    if 'attention_fn' in layer.hooks:
+        attention_fn = layer.hooks['attention_fn']
+
+    mixed_raw_layer = layer.query_key_value(hidden_states)
+    (mixed_query_layer,
+        mixed_key_layer,
+        mixed_value_layer) = split_tensor_along_last_dim(mixed_raw_layer, layer.stride)
+
+    dropout_fn = layer.attention_dropout if layer.training else None
+
+    query_layer = layer._transpose_for_scores(mixed_query_layer)
+    key_layer = layer._transpose_for_scores(mixed_key_layer)
+    value_layer = layer._transpose_for_scores(mixed_value_layer)
+
+    # rotary position embedding 
+    if layer.transformer.is_rotary_emb:
+        query_layer, key_layer = layer.transformer.position_embeddings(
+            query_layer, key_layer, kw_args['position_ids'],max_seqlen=kw_args['position_ids'].max()+1,
+            layer_id=kw_args['layer_id']
+        )
+    rank = dist.get_rank()
+    world_size = dist.get_world_size()
+    if world_size>=4:
+        pad = (0,0,0,0,0,2)
+        query_layer = F.pad(query_layer, pad)
+        key_layer = F.pad(key_layer, pad)
+        value_layer = F.pad(value_layer, pad)
+
+    query_layer = all_to_all(query_layer, 2, 1)
+    key_layer = all_to_all(key_layer, 2, 1)
+    value_layer = all_to_all(value_layer, 2, 1)
+
+    context_layer = attention_fn(query_layer, key_layer, value_layer, mask, dropout_fn, **kw_args)
+
+    context_layer = all_to_all(context_layer, 1, 2)
+    if world_size>=4:
+        context_layer = context_layer[:,:-2,:,:]
+
+
+    context_layer = context_layer.permute(0, 2, 1, 3).contiguous()
+    new_context_layer_shape = context_layer.size()[:-2] + (layer.hidden_size_per_partition,)
+    context_layer = context_layer.view(*new_context_layer_shape)
+    output = layer.dense(context_layer)
+
+    if layer.training:
+        output = layer.output_dropout(output)
+    return output
 
 
 def fastercache_transformer_forward(self, input_ids, position_ids, attention_mask, *,
@@ -192,6 +246,8 @@ def fastercache_transformer_forward(self, input_ids, position_ids, attention_mas
             hidden_states = hidden_states + position_embeddings
         hidden_states = self.embedding_dropout(hidden_states)
 
+        hidden_states = sp_split(hidden_states)
+        
         output_per_layers = []
         if self.checkpoint_activations:
             # define custom_forward for checkpointing
@@ -318,6 +374,7 @@ def fastercache_transformer_forward(self, input_ids, position_ids, attention_mas
             logits = hidden_states
 
         logits = copy_to_model_parallel_region(logits)
+        logits = sp_gather(logits)
         if 'final_forward' in self.hooks:
             logits_parallel = self.hooks['final_forward'](logits, **kw_args, parallel_output=self.parallel_output)
         else:
@@ -434,10 +491,15 @@ def fastercache_layer_forward(
         **kwargs,
     ):
     if True:
+        assert self.transformer.layernorm_order != "sandwich", "SP for Sandwidth layernorm order not supported currently"
         text_length = kwargs["text_length"]
         # hidden_states (b,(n_t+t*n_i),d)
-        text_hidden_states = hidden_states[:, :text_length]  # (b,n,d)
-        img_hidden_states = hidden_states[:, text_length:]  # (b,(t n),d)
+        has_text = dist.get_rank()==0
+        if has_text:
+            text_hidden_states = hidden_states[:, :text_length]  # (b,n,d)
+            img_hidden_states = hidden_states[:, text_length:]  # (b,(t n),d)
+        else:
+            img_hidden_states = hidden_states
         layer = self.transformer.layers[kwargs["layer_id"]]
         adaLN_modulation = self.adaLN_modulations[kwargs["layer_id"]]
 
@@ -464,51 +526,56 @@ def fastercache_layer_forward(
 
         # self full attention (b,(t n),d)
         img_attention_input = layer.input_layernorm(img_hidden_states)
-        text_attention_input = layer.input_layernorm(text_hidden_states)
         img_attention_input = modulate(img_attention_input, shift_msa, scale_msa)
-        text_attention_input = modulate(text_attention_input, text_shift_msa, text_scale_msa)
-
-        attention_input = torch.cat((text_attention_input, img_attention_input), dim=1)  # (b,n_t+t*n_i,d)
+        if has_text:
+            text_attention_input = layer.input_layernorm(text_hidden_states)
+            text_attention_input = modulate(text_attention_input, text_shift_msa, text_scale_msa)
+            attention_input = torch.cat((text_attention_input, img_attention_input), dim=1)  # (b,n_t+t*n_i,d)
+        else:
+            attention_input = img_attention_input
 
         counter = kwargs['counter']
         if counter >= 18 and counter%3!=0 and layer.cached_attn[-1].shape[0]>=attention_input.shape[0]:
             attention_output = layer.cached_attn[1][:attention_input.shape[0]] + (layer.cached_attn[1][:attention_input.shape[0]] - layer.cached_attn[0][:attention_input.shape[0]])*0.3
         else:
-            attention_output = layer.attention(attention_input, mask, **kwargs)
+            attention_output = sp_attention_forward(layer, attention_input, mask, **kwargs)
 
             if counter==15:
                 layer.cached_attn = [attention_output,attention_output]
             elif counter>15:
                 layer.cached_attn = [layer.cached_attn[-1],attention_output]
 
-        text_attention_output = attention_output[:, :text_length]  # (b,n,d)
-        img_attention_output = attention_output[:, text_length:]  # (b,(t n),d)
+        if has_text:
+            text_attention_output = attention_output[:, :text_length]  # (b,n,d)
+            img_attention_output = attention_output[:, text_length:]  # (b,(t n),d)
+        else:
+            img_attention_output = attention_output
 
-        if self.transformer.layernorm_order == "sandwich":
-            text_attention_output = layer.third_layernorm(text_attention_output)
-            img_attention_output = layer.third_layernorm(img_attention_output)
         img_hidden_states = img_hidden_states + gate_msa * img_attention_output  # (b,(t n),d)
-        text_hidden_states = text_hidden_states + text_gate_msa * text_attention_output  # (b,n,d)
-
-        # mlp (b,(t n),d)
         img_mlp_input = layer.post_attention_layernorm(img_hidden_states)  # vision (b,(t n),d)
-        text_mlp_input = layer.post_attention_layernorm(text_hidden_states)  # language (b,n,d)
         img_mlp_input = modulate(img_mlp_input, shift_mlp, scale_mlp)
-        text_mlp_input = modulate(text_mlp_input, text_shift_mlp, text_scale_mlp)
-        mlp_input = torch.cat((text_mlp_input, img_mlp_input), dim=1)  # (b,(n_t+t*n_i),d
+        if has_text:
+            text_hidden_states = text_hidden_states + text_gate_msa * text_attention_output  # (b,n,d)
+            text_mlp_input = layer.post_attention_layernorm(text_hidden_states)  # language (b,n,d)
+            text_mlp_input = modulate(text_mlp_input, text_shift_mlp, text_scale_mlp)
+            mlp_input = torch.cat((text_mlp_input, img_mlp_input), dim=1)  # (b,(n_t+t*n_i),d
+        else:
+            mlp_input = img_mlp_input
 
         mlp_output = layer.mlp(mlp_input, **kwargs)
 
-        img_mlp_output = mlp_output[:, text_length:]  # vision (b,(t n),d)
-        text_mlp_output = mlp_output[:, :text_length]  # language (b,n,d)
-        if self.transformer.layernorm_order == "sandwich":
-            text_mlp_output = layer.fourth_layernorm(text_mlp_output)
-            img_mlp_output = layer.fourth_layernorm(img_mlp_output)
+        if has_text:
+            img_mlp_output = mlp_output[:, text_length:]  # vision (b,(t n),d)
+            text_mlp_output = mlp_output[:, :text_length]  # language (b,n,d)
+        else:
+            img_mlp_output = mlp_output
 
         img_hidden_states = img_hidden_states + gate_mlp * img_mlp_output  # vision (b,(t n),d)
-        text_hidden_states = text_hidden_states + text_gate_mlp * text_mlp_output  # language (b,n,d)
-
-        hidden_states = torch.cat((text_hidden_states, img_hidden_states), dim=1)  # (b,(n_t+t*n_i),d)
+        if has_text:
+            text_hidden_states = text_hidden_states + text_gate_mlp * text_mlp_output  # language (b,n,d)
+            hidden_states = torch.cat((text_hidden_states, img_hidden_states), dim=1)  # (b,(n_t+t*n_i),d)
+        else:
+            hidden_states = img_hidden_states
         return hidden_states
 
 def sampling_main(args, model_cls):
@@ -521,10 +588,10 @@ def sampling_main(args, model_cls):
     model.eval()
 
     if args.input_type == "cli":
+        rank, world_size = mpu.get_data_parallel_rank(), mpu.get_data_parallel_world_size()
         data_iter = read_from_cli()
     elif args.input_type == "txt":
         rank, world_size = mpu.get_data_parallel_rank(), mpu.get_data_parallel_world_size()
-        print("rank and world_size", rank, world_size)
         data_iter = read_from_file(args.input_file, rank=rank, world_size=world_size)
     else:
         raise NotImplementedError
@@ -588,13 +655,14 @@ def sampling_main(args, model_cls):
                 model.to(device)
                 ###########SET COUNTER##################
                 model.model.diffusion_model.counter = 0
-
+                start_time = time()
                 samples_z = sample_func(
                     c,
                     uc=uc,
                     batch_size=1,
                     shape=(T, C, H // F, W // F),
                 )
+                print("Iter finish, time",time()-start_time)
                 samples_z = samples_z.permute(0, 2, 1, 3, 4).contiguous()
                 
                 # Unload the model from GPU to save GPU memory
@@ -641,6 +709,7 @@ if __name__ == "__main__":
 
     init_process_groups()
     initialize_context_parallel(1)
+    assert dist.get_world_size() in [1, 2, 4, 8], "Sequence parallel size only allowed to be 1, 2, 4, 8"
     py_parser = argparse.ArgumentParser(add_help=False)
     known, args_list = py_parser.parse_known_args()
 
