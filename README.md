@@ -97,9 +97,14 @@ We currently support [Open-Sora 1.2](https://github.com/hpcaitech/Open-Sora), [O
 
 - **CogVideoX**
 
-    For inference on CogVideoX-2B, run the following command:
+    For single-GPU or multi-GPU batched inference on CogVideoX-2B, run the following command:
     ```
     bash scripts/cogvideox/fastercache_sample_cogvideox.sh
+    ```
+
+    For multi-GPU inference on CogVideoX-2B, run the following command:
+    ```
+    bash scripts/cogvideox/fastercache_sample_cogvideox_multi_device.sh
     ```
 
     For inference on CogVideoX-5B, run the following command:

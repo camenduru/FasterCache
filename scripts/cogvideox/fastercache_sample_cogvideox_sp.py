@@ -147,7 +147,6 @@ from fastercache.models.cogvideox.sgm.modules.diffusionmodules.util import (
     timestep_embedding,
 )
 from sat.ops.layernorm import LayerNorm, RMSNorm
-from time import time
 
 
 def sp_attention_forward(layer, hidden_states, mask, **kw_args):
@@ -655,14 +654,12 @@ def sampling_main(args, model_cls):
                 model.to(device)
                 ###########SET COUNTER##################
                 model.model.diffusion_model.counter = 0
-                start_time = time()
                 samples_z = sample_func(
                     c,
                     uc=uc,
                     batch_size=1,
                     shape=(T, C, H // F, W // F),
                 )
-                print("Iter finish, time",time()-start_time)
                 samples_z = samples_z.permute(0, 2, 1, 3, 4).contiguous()
                 
                 # Unload the model from GPU to save GPU memory
