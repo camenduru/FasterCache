@@ -37,6 +37,11 @@ We present ***FasterCache***, a novel training-free strategy designed to acceler
 
 https://github.com/user-attachments/assets/035c50c2-7b74-4755-ac1e-e5aa1cffba2a
 
+## News
+
+* (🔥 New) 2024/11/8 We support the multi-device inference script for CogvideoX
+* (🔥 New) 2024/11/8 We implemented FasterCache based on the Mochi
+
 ## Usage
 
 ### Installation
@@ -53,7 +58,7 @@ pip install -e .
 
 ### Inference
 
-We currently support [Open-Sora 1.2](https://github.com/hpcaitech/Open-Sora), [Open-Sora-Plan 1.1](https://github.com/PKU-YuanGroup/Open-Sora-Plan), [Latte](https://github.com/Vchitect/Latte), [CogvideoX-2B](https://github.com/THUDM/CogVideo), and [Vchitect 2.0](https://github.com/Vchitect/Vchitect-2.0). You can achieve accelerated sampling by executing the scripts we provide.
+We currently support [Open-Sora 1.2](https://github.com/hpcaitech/Open-Sora), [Open-Sora-Plan 1.1](https://github.com/PKU-YuanGroup/Open-Sora-Plan), [Latte](https://github.com/Vchitect/Latte), [CogvideoX-2B&5B](https://github.com/THUDM/CogVideo),  [Vchitect 2.0](https://github.com/Vchitect/Vchitect-2.0) and [Mochi](https://github.com/genmoai/models). You can achieve accelerated sampling by executing the scripts we provide.
 
 - **Open-Sora**
 
@@ -113,14 +118,22 @@ We currently support [Open-Sora 1.2](https://github.com/hpcaitech/Open-Sora), [O
     bash scripts/cogvideox/fastercache_sample_cogvideox5b.sh
     ```
 
-    
-
 - **Vchitect 2.0**
 
     For inference on Vchitect 2.0, run the following command:
     ```
     bash scripts/vchitect/fastercache_sample_vchitect.sh
     ```
+
+* **Mochi**
+
+  We also provide acceleration scripts for Mochi. Before running these scripts, please follow the [official Mochi repository](https://github.com/genmoai/models) to complete model downloads, environment setup, and installation of genmo. Then, execute the following script:
+
+  ```
+  bash scripts/mochi/fastercache_sample_mochi.sh 
+  ```
+
+https://github.com/user-attachments/assets/264ab7dc-9ac5-4b74-800a-2b6088992db7
 
 ## BibTeX
 
@@ -135,4 +148,4 @@ We currently support [Open-Sora 1.2](https://github.com/hpcaitech/Open-Sora), [O
 
 ## Acknowledgement
 
-This repository borrows code from [VideoSys](https://github.com/NUS-HPC-AI-Lab/VideoSys), [Vchitect-2.0](https://github.com/Vchitect/Vchitect-2.0), and [CogVideo](https://github.com/THUDM/CogVideo),.Thanks for their contributions!
+This repository borrows code from [VideoSys](https://github.com/NUS-HPC-AI-Lab/VideoSys), [Vchitect-2.0](https://github.com/Vchitect/Vchitect-2.0), [Mochi](https://github.com/genmoai/models), and [CogVideo](https://github.com/THUDM/CogVideo),.Thanks for their contributions!
