@@ -133,8 +133,6 @@ We currently support [Open-Sora 1.2](https://github.com/hpcaitech/Open-Sora), [O
   bash scripts/mochi/fastercache_sample_mochi.sh 
   ```
 
-https://github.com/user-attachments/assets/264ab7dc-9ac5-4b74-800a-2b6088992db7
-
 ## BibTeX
 
 ```
