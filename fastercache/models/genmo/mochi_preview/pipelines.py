@@ -348,8 +348,8 @@ def fastercache_asynmmetricjb_forward(
         else:
             scale_msa_y = mod_y
         
-        if cnt >= 22 and cnt % 2 == 0:
-            x_attn = self.x_attn_cache[1] + (self.x_attn_cache[1] - self.x_attn_cache[0])*0.5
+        if cnt >= 20 and cnt % 2 == 0:
+            x_attn = self.x_attn_cache[1] + (self.x_attn_cache[1] - self.x_attn_cache[0])*max(0.5, 1-(63-cnt)/63)
             y_attn = self.y_attn_cache
         else:
             x_attn, y_attn = self.attn(
@@ -537,9 +537,9 @@ def sample_model_fastercache(device, dit, conditioning, **args):
                     out_cond_forfft = rearrange(out_cond, "B C T H W -> (B T) C H W", B=bb, C=cc, T=tt, H=hh, W=ww)
                     lf_c, hf_c = fft(out_cond_forfft.float())
                     if cnt >= 30:
-                        cfg_delta_high = cfg_delta_high * 1.2
+                        cfg_delta_high = cfg_delta_high * 1.25
                     if cnt <= 50:
-                        cfg_delta_low = cfg_delta_low * 1.05
+                        cfg_delta_low = cfg_delta_low * 1.15
                     new_hf_uc = cfg_delta_high + hf_c
                     new_lf_uc = cfg_delta_low + lf_c
                     combine_uc = new_lf_uc + new_hf_uc
