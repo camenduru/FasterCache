@@ -31,7 +31,7 @@ from transformers.models.t5.modeling_t5 import T5Block
 
 import genmo.mochi_preview.dit.joint_model.context_parallel as cp
 import genmo.mochi_preview.vae.cp_conv as cp_conv
-from genmo.mochi_preview.vae.model import Decoder, apply_tiled
+from genmo.mochi_preview.vae.models import Decoder, apply_tiled
 from genmo.lib.progress import get_new_progress_bar, progress_bar
 from genmo.lib.utils import Timer
 
@@ -91,7 +91,7 @@ def linear_quadratic_schedule(num_steps, threshold_noise, linear_steps=None):
     return sigma_schedule
 
 
-T5_MODEL = "google/t5-v1_1-xxl"
+T5_MODEL = "mcmonkey/google_t5-v1_1-xxl_encoderonly"
 MAX_T5_TOKEN_LENGTH = 256
 
 
@@ -224,7 +224,7 @@ class DecoderModelFactory(ModelFactory):
             num_res_blocks=[3, 3, 4, 6, 3],
             latent_dim=12,
             has_attention=[False, False, False, False, False],
-            padding_mode="replicate",
+            # padding_mode="replicate",
             output_norm=False,
             nonlinearity="silu",
             output_nonlinearity="silu",
