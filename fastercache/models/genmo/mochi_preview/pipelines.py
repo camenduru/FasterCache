@@ -869,6 +869,44 @@ class MochiSingleGPUPipeline:
             print_max_memory()
             return frames.cpu().numpy()
 
+class MochiSingleGPUDecodePipeline:
+    def __init__(
+        self,
+        *,
+        decoder_factory: ModelFactory,
+        cpu_offload: Optional[bool] = False,
+        decode_type: str = "full",
+        decode_args: Optional[Dict[str, Any]] = None,
+    ):
+        self.device = torch.device("cuda:0")
+        self.tokenizer = t5_tokenizer()
+        t = Timer()
+        self.cpu_offload = cpu_offload
+        self.decode_args = decode_args or {}
+        self.decode_type = decode_type
+        init_id = "cpu" if cpu_offload else 0
+        with t("load_vae"):
+            self.decoder = decoder_factory.get_model(local_rank=0, device_id=init_id, world_size=1)
+        t.print_stats()
+
+    def __call__(self, latents, **kwargs):
+        # progress_bar(type="tqdm"),
+        with torch.inference_mode():
+            print_max_memory = lambda: print(
+                f"Max memory reserved: {torch.cuda.max_memory_reserved() / 1024**3:.2f} GB"
+            )
+            print_max_memory()
+            with move_to_device(self.decoder, self.device):
+                frames = (
+                    decode_latents_tiled_full(self.decoder, latents, **self.decode_args)
+                    if self.decode_type == "tiled_full"
+                    else
+                    decode_latents_tiled_spatial(self.decoder, latents, **self.decode_args)
+                    if self.decode_type == "tiled_spatial"
+                    else decode_latents_pure(self.decoder, latents)
+                )
+            print_max_memory()
+            return frames.cpu().numpy()
 
 ### ALL CODE BELOW HERE IS FOR MULTI-GPU MODE ###
 
